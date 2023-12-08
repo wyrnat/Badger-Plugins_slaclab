@@ -1,0 +1,7 @@
+---
+name: sinusoid
+description: "Sin-based test environment with constraints"
+version: "0.1"
+dependencies:
+  - numpy
+  - badger-opt

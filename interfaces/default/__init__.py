@@ -1,26 +1,33 @@
 from badger import interface
+from typing import Dict
 
 
 class Interface(interface.Interface):
 
     name = 'default'
+    # If params not specified, it would be an empty dict
 
-    def __init__(self, params=None):
-        super().__init__(params)
+    # Private variables
+    _states: Dict
 
-        self.states = {}
+    def __init__(self, **data):
+        super().__init__(**data)
 
-    @staticmethod
-    def get_default_params():
-        return None
+        self._states = {}
 
-    def get_value(self, channel: str):
-        try:
-            value = self.states[channel]
-        except KeyError:
-            self.states[channel] = value = 0
+    def get_values(self, channel_names):
+        channel_outputs = {}
 
-        return value
+        for channel in channel_names:
+            try:
+                value = self._states[channel]
+            except KeyError:
+                self._states[channel] = value = 0
 
-    def set_value(self, channel: str, value):
-        self.states[channel] = value
+            channel_outputs[channel] = value
+
+        return channel_outputs
+
+    def set_values(self, channel_inputs):
+        for channel, value in channel_inputs.items():
+            self._states[channel] = value
